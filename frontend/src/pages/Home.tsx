@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import CinematicScene from '../components/3d/Scene';
+const CinematicScene = lazy(() => import('../components/3d/Scene'));
 import { MagneticButton } from '../components/ui/MagneticButton';
 import { Link } from 'react-router-dom';
 
@@ -38,7 +38,9 @@ const Home = () => {
     <div className="w-full">
       <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0 hidden md:block">
-          <CinematicScene />
+          <Suspense fallback={<div className="w-full h-full bg-background" />}>
+            <CinematicScene />
+          </Suspense>
         </div>
         <div className="absolute inset-0 z-0 bg-gradient-to-b from-background via-surface to-background md:hidden" />
 
