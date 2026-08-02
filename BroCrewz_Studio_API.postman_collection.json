@@ -1,0 +1,87 @@
+{
+	"info": {
+		"_postman_id": "c8e8c8e8-c8e8-c8e8-c8e8-c8e8c8e8c8e8",
+		"name": "BroCrewz Studio API",
+		"description": "API collection for BroCrewz Studio Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@brocrewz.com\",\n    \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Public",
+			"item": [
+				{
+					"name": "Get Services",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/public/services",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"public",
+								"services"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Team",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/public/team",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"public",
+								"team"
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}
