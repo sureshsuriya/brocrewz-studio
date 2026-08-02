@@ -71,9 +71,9 @@ const Home = () => {
             { value: "Consistency", label: "Guaranteed" },
             { value: "Growth", label: "Channel Scaling" }
           ].map((stat, idx) => (
-            <div key={idx} className="glass-card-premium p-8">
-              <h3 className="text-3xl md:text-4xl font-black text-primary-gold mb-2">{stat.value}</h3>
-              <p className="text-secondary-text uppercase tracking-widest text-xs md:text-sm">{stat.label}</p>
+            <div key={idx} className="glass-card-premium p-4 md:p-8 flex flex-col justify-center">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-primary-gold mb-2">{stat.value}</h3>
+              <p className="text-secondary-text uppercase tracking-widest text-[10px] sm:text-xs md:text-sm leading-tight">{stat.label}</p>
             </div>
           ))}
         </div>
