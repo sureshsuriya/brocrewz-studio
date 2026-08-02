@@ -9,6 +9,7 @@ const PageTransition = ({ children }: { children: ReactNode }) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.6, ease: 'easeInOut' }}
       className="w-full h-full"
+      style={{ gridArea: '1 / 1 / 2 / 2' }}
     >
       {children}
     </motion.div>

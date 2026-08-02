@@ -21,7 +21,7 @@ const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 function AnimatedRoutes() {
   const location = useLocation();
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence>
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<PageTransition><Home /></PageTransition>} />
         <Route path="/about" element={<PageTransition><About /></PageTransition>} />
@@ -83,8 +83,8 @@ function App() {
       <div className="flex flex-col min-h-screen bg-background text-primary-text">
         <div ref={cursorRef} className="custom-cursor hidden md:block" />
         <Navbar />
-        <main className="flex-grow pt-20">
-          <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-primary-gold font-bold tracking-widest uppercase text-xl">Loading...</div>}>
+        <main className="flex-grow pt-20 grid" style={{ gridTemplateColumns: '1fr', gridTemplateRows: '1fr' }}>
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-primary-gold font-bold tracking-widest uppercase text-xl" style={{ gridArea: '1 / 1 / 2 / 2' }}>Loading...</div>}>
             <AnimatedRoutes />
           </Suspense>
         </main>
