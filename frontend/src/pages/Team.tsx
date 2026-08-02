@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion';
 
 const teamMembers = [
-  { name: "Mukesh", role: "Video Editor", tag: "Pro", image: "/assets/team/mukesh.jpg" },
   { name: "Lenin", role: "Professional Editor", tag: "Lead", image: "/assets/team/lenin.jpg" },
-  { name: "Vethams", role: "Video Editor", tag: "Pro", image: "/assets/team/vethams.jpg" },
   { name: "Jerry", role: "Video Editor", tag: "Pro", image: "/assets/team/jerry.jpg" },
   { name: "Sam", role: "Video Editor", tag: "Pro", image: "/assets/team/sam.jpg" },
-  { name: "Sujith", role: "Video Editor", tag: "Pro", image: "/assets/team/sujith.jpg" },
   { name: "Subbu", role: "Video Editor", tag: "Pro", image: "/assets/team/subbu.jpg" },
+  { name: "Mukesh", role: "Video Editor", tag: "Pro", image: "/assets/team/mukesh.jpg" },
+  { name: "Vethams", role: "Video Editor", tag: "Pro", image: "/assets/team/vethams.jpg" },
+  { name: "Sujith", role: "Video Editor", tag: "Pro", image: "/assets/team/sujith.jpg" },
   { name: "Suresh P", role: "Web Lead", tag: "Lead", image: "/assets/team/suresh.jpg" }
 ];
 
