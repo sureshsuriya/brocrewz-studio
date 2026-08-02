@@ -1,50 +1,38 @@
 import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { MagneticButton } from './ui/MagneticButton';
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  
+
+  const links = [
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/about' },
+    { name: 'Services', path: '/services' },
+    { name: 'Portfolio', path: '/portfolio' },
+    { name: 'Team', path: '/team' },
+    { name: 'Contact', path: '/contact' },
+  ];
 
   return (
-    <nav className="glass-nav fixed w-full z-50 top-0">
+    <nav className="fixed w-full z-50 top-0 glass-card-premium !rounded-none border-t-0 border-x-0 border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          <div className="flex-shrink-0">
-            <Link to="/" className="text-2xl font-bold text-gradient-gold">
-              BROCREWZ STUDIO
-            </Link>
-          </div>
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
-              <Link to="/" className="hover:text-premium-gold transition-colors">Home</Link>
-              <Link to="/about" className="hover:text-premium-gold transition-colors">About</Link>
-              <Link to="/services" className="hover:text-premium-gold transition-colors">Services</Link>
-              <Link to="/portfolio" className="hover:text-premium-gold transition-colors">Portfolio</Link>
-              <Link to="/team" className="hover:text-premium-gold transition-colors">Team</Link>
-              <Link to="/contact" className="hover:text-premium-gold transition-colors">Contact</Link>
-            </div>
-          </div>
-          <div className="md:hidden">
-            <button onClick={() => setIsOpen(!isOpen)} className="text-premium-gold">
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
+        <div className="flex justify-between items-center h-20">
+          <Link to="/" className="flex items-center space-x-3 text-2xl font-black tracking-tighter text-white group">
+            <img src="/assets/logo/logo.jpg" alt="BroCrewz Logo" className="w-10 h-10 object-contain rounded-lg group-hover:scale-105 transition-transform" />
+            <span>BRO<span className="text-gradient-gold">CREWZ</span></span>
+          </Link>
+          <div className="hidden md:flex space-x-8 items-center">
+            {links.map((link) => (
+              <MagneticButton key={link.name}>
+                <Link to={link.path} className="text-sm font-bold text-silver hover:text-primary-gold uppercase tracking-wider transition-colors">
+                  {link.name}
+                </Link>
+              </MagneticButton>
+            ))}
           </div>
         </div>
       </div>
-      {isOpen && (
-        <div className="md:hidden bg-premium-dark p-4">
-          <div className="flex flex-col space-y-4">
-            <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
-            <Link to="/about" onClick={() => setIsOpen(false)}>About</Link>
-            <Link to="/services" onClick={() => setIsOpen(false)}>Services</Link>
-            <Link to="/portfolio" onClick={() => setIsOpen(false)}>Portfolio</Link>
-            <Link to="/team" onClick={() => setIsOpen(false)}>Team</Link>
-            <Link to="/contact" onClick={() => setIsOpen(false)}>Contact</Link>
-          </div>
-        </div>
-      )}
     </nav>
   );
 };
-
 export default Navbar;

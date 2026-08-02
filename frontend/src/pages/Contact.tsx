@@ -1,96 +1,75 @@
-import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
-import { MessageSquare, Mail } from 'lucide-react';
-
-const InstagramIcon = () => (
-  <svg className="w-8 h-8 mt-1 text-premium-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-  </svg>
-);
+import { useForm } from 'react-hook-form';
+import { MagneticButton } from '../components/ui/MagneticButton';
 
 const Contact = () => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
-  const onSubmit = async (_data: any) => {
-    try {
-      // Assuming a backend endpoint is ready
-      // await axios.post('/api/public/contact', _data);
-      alert('Message sent successfully!');
-      reset();
-    } catch (_err) {
-      console.error(_err);
-      alert('Failed to send message.');
-    }
+  const onSubmit = (_data: any) => {
+    alert("Message Sent (Placeholder)");
+    reset();
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-16">
-      <div className="text-center mb-16">
-        <h2 className="text-4xl font-bold text-gradient-gold mb-4">Contact Us</h2>
-        <p className="text-premium-silver">Ready to elevate your content? Get in touch with us today.</p>
-      </div>
+    <div className="max-w-7xl mx-auto px-4 py-24 min-h-screen grid md:grid-cols-2 gap-16 items-center">
+      <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }}>
+        <h2 className="text-5xl font-black text-white mb-6 uppercase">Let's <span className="text-gradient-gold">Talk</span></h2>
+        <p className="text-silver mb-10 text-lg">Ready to take your content to the cinematic level? Drop us a message.</p>
+        
+        <div className="space-y-6">
+          <MagneticButton>
+            <a href="https://wa.me/918124376230" className="flex items-center space-x-4 glass-card-premium p-6 hover:border-primary-gold transition-colors w-full">
+              <div className="w-12 h-12 bg-primary-gold/10 rounded-full flex items-center justify-center text-primary-gold">📞</div>
+              <div>
+                <h4 className="font-bold text-white">Call Lenin (Lead Editor)</h4>
+                <p className="text-secondary-text">+91 81243 76230</p>
+              </div>
+            </a>
+          </MagneticButton>
 
-      <div className="grid md:grid-cols-2 gap-12">
-        <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
-          <div className="glass-card p-6 flex items-start space-x-4 hover:border-premium-gold transition-colors">
-            <MessageSquare className="text-premium-gold w-8 h-8 mt-1" />
-            <div>
-              <h4 className="text-xl font-bold text-white mb-1">WhatsApp</h4>
-              <p className="text-premium-silverDark mb-2">Message us for quick replies.</p>
-              <a href="https://wa.me/918124376230" target="_blank" rel="noreferrer" className="text-premium-gold hover:underline">+91 81243 76230</a>
-            </div>
-          </div>
-
-          <div className="glass-card p-6 flex items-start space-x-4 hover:border-premium-gold transition-colors">
-            <InstagramIcon />
-            <div>
-              <h4 className="text-xl font-bold text-white mb-1">Instagram</h4>
-              <p className="text-premium-silverDark mb-2">Check out our latest work.</p>
-              <a href="#" className="text-premium-gold hover:underline">@brocrewz.studio</a>
-            </div>
-          </div>
-
-          <div className="glass-card p-6 flex items-start space-x-4 hover:border-premium-gold transition-colors">
-            <Mail className="text-premium-gold w-8 h-8 mt-1" />
-            <div>
-              <h4 className="text-xl font-bold text-white mb-1">Email</h4>
-              <p className="text-premium-silverDark mb-2">For business inquiries.</p>
-              <a href="mailto:contact@brocrewz.com" className="text-premium-gold hover:underline">contact@brocrewz.com</a>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} className="glass-card p-8">
-          <h3 className="text-2xl font-bold text-white mb-6">Send a Message</h3>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div>
-              <label className="block text-premium-silverDark mb-2">Name</label>
-              <input {...register('name', { required: true })} className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-premium-gold focus:outline-none" />
-              {errors.name && <span className="text-red-500 text-sm">Name is required</span>}
-            </div>
-            <div>
-              <label className="block text-premium-silverDark mb-2">Email</label>
-              <input type="email" {...register('email', { required: true })} className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-premium-gold focus:outline-none" />
-              {errors.email && <span className="text-red-500 text-sm">Email is required</span>}
-            </div>
-            <div>
-              <label className="block text-premium-silverDark mb-2">Message</label>
-              <textarea {...register('message', { required: true })} rows={4} className="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:border-premium-gold focus:outline-none"></textarea>
-              {errors.message && <span className="text-red-500 text-sm">Message is required</span>}
-            </div>
-            <button type="submit" className="btn-primary w-full text-black">Send Message</button>
-          </form>
-        </motion.div>
-      </div>
-      
-      <div className="mt-16 text-center">
-        <h3 className="text-2xl font-bold text-white mb-6">Our Location</h3>
-        <div className="glass-card h-96 w-full rounded-2xl overflow-hidden flex items-center justify-center bg-black/50">
-           <p className="text-premium-silverDark">Google Maps Embed Placeholder</p>
+          <MagneticButton>
+            <a href="https://wa.me/916380364289" className="flex items-center space-x-4 glass-card-premium p-6 hover:border-primary-gold transition-colors w-full">
+              <div className="w-12 h-12 bg-primary-gold/10 rounded-full flex items-center justify-center text-primary-gold">📞</div>
+              <div>
+                <h4 className="font-bold text-white">Call Vethams (Pro Editor)</h4>
+                <p className="text-secondary-text">+91 63803 64289</p>
+              </div>
+            </a>
+          </MagneticButton>
+          
+          <MagneticButton>
+            <a href="#" className="flex items-center space-x-4 glass-card-premium p-6 hover:border-accent-blue transition-colors w-full">
+              <div className="w-12 h-12 bg-accent-blue/10 rounded-full flex items-center justify-center text-accent-blue">IG</div>
+              <div>
+                <h4 className="font-bold text-white">Instagram</h4>
+                <p className="text-secondary-text">@brocrewz.studio</p>
+              </div>
+            </a>
+          </MagneticButton>
         </div>
-      </div>
+      </motion.div>
+
+      <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} className="glass-card-premium p-10 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary-gold/5 blur-[100px] rounded-full pointer-events-none" />
+        <h3 className="text-2xl font-bold text-white mb-8">Send a Message</h3>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 relative z-10">
+          <div className="relative group">
+            <input type="text" {...register("name")} required className="w-full bg-background/50 border border-white/10 rounded-lg p-4 text-white focus:border-primary-gold outline-none transition-colors peer" placeholder=" " />
+            <label className="absolute left-4 top-4 text-secondary-text transition-all peer-focus:-top-3 peer-focus:text-xs peer-focus:text-primary-gold peer-focus:bg-surface px-1 peer-valid:-top-3 peer-valid:text-xs peer-valid:bg-surface">Your Name</label>
+          </div>
+          <div className="relative group">
+            <input type="email" {...register("email")} required className="w-full bg-background/50 border border-white/10 rounded-lg p-4 text-white focus:border-primary-gold outline-none transition-colors peer" placeholder=" " />
+            <label className="absolute left-4 top-4 text-secondary-text transition-all peer-focus:-top-3 peer-focus:text-xs peer-focus:text-primary-gold peer-focus:bg-surface px-1 peer-valid:-top-3 peer-valid:text-xs peer-valid:bg-surface">Your Email</label>
+          </div>
+          <div className="relative group">
+            <textarea {...register("message")} required rows={4} className="w-full bg-background/50 border border-white/10 rounded-lg p-4 text-white focus:border-primary-gold outline-none transition-colors peer" placeholder=" "></textarea>
+            <label className="absolute left-4 top-4 text-secondary-text transition-all peer-focus:-top-3 peer-focus:text-xs peer-focus:text-primary-gold peer-focus:bg-surface px-1 peer-valid:-top-3 peer-valid:text-xs peer-valid:bg-surface">Message</label>
+          </div>
+          <MagneticButton className="w-full">
+            <button type="submit" className="w-full bg-white text-background font-bold py-4 rounded-lg hover:bg-primary-gold transition-colors">Submit</button>
+          </MagneticButton>
+        </form>
+      </motion.div>
     </div>
   );
 };

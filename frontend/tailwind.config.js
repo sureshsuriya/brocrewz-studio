@@ -7,18 +7,29 @@ export default {
   theme: {
     extend: {
       colors: {
-        premium: {
-          black: '#0a0a0a',
-          dark: '#141414',
-          gold: '#d4af37',
-          goldLight: '#f3e5ab',
-          silver: '#c0c0c0',
-          silverDark: '#a9a9a9'
-        }
+        background: "#0B0B0F",
+        surface: "#14141A",
+        "glass-card": "rgba(255,255,255,0.06)",
+        "primary-gold": "#D4AF37",
+        "secondary-gold": "#F4C542",
+        silver: "#C9CDD4",
+        "primary-text": "#F8F9FA",
+        "secondary-text": "#9CA3AF",
+        "accent-blue": "#4F8CFF"
       },
-      backgroundImage: {
-        'gold-gradient': 'linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c)',
-        'black-gold': 'linear-gradient(135deg, #0a0a0a 0%, #141414 50%, #2a2208 100%)',
+      animation: {
+        "float": "float 6s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
+        "pulse-glow": {
+          '0%, 100%': { opacity: 1, boxShadow: "0 0 15px rgba(212, 175, 55, 0.5)" },
+          '50%': { opacity: .5, boxShadow: "0 0 5px rgba(212, 175, 55, 0.2)" },
+        }
       }
     },
   },

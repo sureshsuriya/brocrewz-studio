@@ -35,3 +35,22 @@ A premium, full-stack video editing agency platform with a React.js frontend, Sp
 ## Default Admin Credentials
 - **Email:** admin@brocrewz.com
 - **Password:** admin123
+
+---
+
+## Developer & Leadership
+
+**Suresh P**  
+*Operations Manager & Web Lead*
+
+Suresh P oversees operations and leads the development of BroCrewz Studio's digital platform. He is responsible for planning, designing, and managing the website while ensuring a modern user experience, reliable backend architecture, and continuous improvements to the company's online presence.
+
+**Responsibilities:**
+- Operations Management
+- Website Planning & Strategy
+- UI/UX Design
+- Frontend Development
+- Backend Development
+- Database Management
+- Performance Optimization
+- Technical Leadership
