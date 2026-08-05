@@ -20,4 +20,13 @@ public class ContactMessage {
     @Column(columnDefinition = "TEXT")
     private String message;
     private LocalDateTime createdAt;
+    
+    @Builder.Default
+    private boolean isRead = false;
+    
+    @Builder.Default
+    private boolean isReplied = false;
+    
+    @Column(columnDefinition = "TEXT")
+    private String replyNotes;
 }

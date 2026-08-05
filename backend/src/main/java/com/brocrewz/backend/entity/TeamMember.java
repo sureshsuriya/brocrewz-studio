@@ -17,6 +17,10 @@ public class TeamMember {
     private String role;
     private String phone;
     @Column(columnDefinition = "TEXT")
+    private String description;
+    private Integer displayOrder;
+    private String category; // LEADERSHIP, TEAM
+    @Column(columnDefinition = "TEXT")
     private String skills; // comma separated
     private String imageUrl;
 }

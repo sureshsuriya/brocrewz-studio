@@ -19,4 +19,18 @@ public class PortfolioItem {
     private String videoUrl;
     private String beforeImageUrl;
     private String afterImageUrl;
+
+    private String clientName;
+    @Column(columnDefinition = "TEXT")
+    private String description;
+    private String completionDate;
+    
+    @Builder.Default
+    private boolean isFeatured = false;
+    
+    @Builder.Default
+    private boolean isActive = true;
+    
+    @Builder.Default
+    private Integer displayOrder = 0;
 }

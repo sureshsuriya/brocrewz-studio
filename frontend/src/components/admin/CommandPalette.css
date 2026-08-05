@@ -1,0 +1,57 @@
+.command-palette-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 640px;
+  z-index: 100;
+  outline: none;
+}
+
+.command-palette-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 90;
+}
+
+.command-palette-content {
+  position: relative;
+  z-index: 100;
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+[cmdk-group-heading] {
+  padding: 8px 12px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+[cmdk-item] {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  border-radius: 6px;
+  margin: 4px;
+}
+
+[cmdk-item][aria-selected="true"] {
+  background: rgba(212, 175, 55, 0.15); /* primary gold with opacity */
+  color: #D4AF37;
+}
+
+[cmdk-item]:active {
+  background: rgba(212, 175, 55, 0.25);
+}

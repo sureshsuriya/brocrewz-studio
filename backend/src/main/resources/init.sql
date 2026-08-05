@@ -25,8 +25,8 @@ INSERT IGNORE INTO service_plans (id, name, description, price, plan_type, featu
 
 -- Team Members
 INSERT IGNORE INTO team_members (id, name, role, phone, skills, image_url) VALUES
-(1, 'Lenin', 'Professional Video Editor', '+91 81243 76230', 'Professional Video Editing, YouTube Editing, Shorts Editing, Motion Graphics, Color Grading, Audio Enhancement', '/assets/team/lenin.png'),
-(2, 'Vethams', 'Video Editor', '+91 63803 64289', 'Video Editing, YouTube Editing, Reels Editing, Shorts Editing, Motion Graphics', '/assets/team/vethams.png'),
-(3, 'Jerry', 'Video Editor', NULL, 'Video Editing, YouTube Editing, Shorts Editing, Instagram Reels, Color Grading', '/assets/team/jerry.png'),
-(4, 'Sam', 'Video Editor', NULL, 'Professional Editing, YouTube Editing, Reels Editing, Motion Graphics', '/assets/team/sam.png'),
-(5, 'Sujith', 'Video Editor', NULL, 'Professional Editing, YouTube Editing, Shorts Editing, Color Correction', '/assets/team/sujith.png');
+(1, 'Lenin', 'Professional Video Editor', '+91 81243 76230', 'Professional Video Editing, YouTube Editing, Shorts Editing, Motion Graphics, Color Grading, Audio Enhancement', '/assets/team/lenin.jpg'),
+(2, 'Vethams', 'Video Editor', '+91 63803 64289', 'Video Editing, YouTube Editing, Reels Editing, Shorts Editing, Motion Graphics', '/assets/team/vethams.jpg'),
+(3, 'Jerry', 'Video Editor', NULL, 'Video Editing, YouTube Editing, Shorts Editing, Instagram Reels, Color Grading', '/assets/team/jerry.jpg'),
+(4, 'Sam', 'Video Editor', NULL, 'Professional Editing, YouTube Editing, Reels Editing, Motion Graphics', '/assets/team/sam.jpg'),
+(5, 'Sujith', 'Video Editor', NULL, 'Professional Editing, YouTube Editing, Shorts Editing, Color Correction', '/assets/team/sujith.jpg');

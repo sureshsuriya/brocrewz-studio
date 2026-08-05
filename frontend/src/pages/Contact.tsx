@@ -1,13 +1,24 @@
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { MagneticButton } from '../components/ui/MagneticButton';
+import axios from 'axios';
+import { toast } from 'sonner';
+import { useState } from 'react';
 
 const Contact = () => {
   const { register, handleSubmit, reset } = useForm();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmit = (_data: any) => {
-    alert("Message Sent (Placeholder)");
-    reset();
+  const onSubmit = async (data: any) => {
+    setIsSubmitting(true);
+    try {
+      await axios.post('/api/public/contact', { ...data, subject: 'New Inquiry from Website' });
+      toast.success("Message sent successfully! We will get back to you soon.");
+      reset();
+    } catch (e: any) {
+      toast.error(e.response?.data || "Failed to send message. Please try again.");
+    }
+    setIsSubmitting(false);
   };
 
   return (
@@ -38,11 +49,11 @@ const Contact = () => {
           </MagneticButton>
           
           <MagneticButton>
-            <a href="#" className="flex items-center space-x-4 glass-card-premium p-6 hover:border-accent-blue transition-colors w-full">
+            <a href="https://www.instagram.com/brocrewz._studio/" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-4 glass-card-premium p-6 hover:border-accent-blue transition-colors w-full">
               <div className="w-12 h-12 bg-accent-blue/10 rounded-full flex items-center justify-center text-accent-blue">IG</div>
               <div>
                 <h4 className="font-bold text-white">Instagram</h4>
-                <p className="text-secondary-text">@brocrewz.studio</p>
+                <p className="text-secondary-text">@brocrewz._studio</p>
               </div>
             </a>
           </MagneticButton>
@@ -66,7 +77,9 @@ const Contact = () => {
             <label className="absolute left-4 top-4 text-secondary-text transition-all peer-focus:-top-3 peer-focus:text-xs peer-focus:text-primary-gold peer-focus:bg-surface px-1 peer-valid:-top-3 peer-valid:text-xs peer-valid:bg-surface">Message</label>
           </div>
           <MagneticButton className="w-full">
-            <button type="submit" className="w-full bg-white text-background font-bold py-4 rounded-lg hover:bg-primary-gold transition-colors">Submit</button>
+            <button disabled={isSubmitting} type="submit" className="w-full bg-white text-background font-bold py-4 rounded-lg hover:bg-primary-gold transition-colors disabled:opacity-50">
+              {isSubmitting ? 'Sending...' : 'Submit'}
+            </button>
           </MagneticButton>
         </form>
       </motion.div>

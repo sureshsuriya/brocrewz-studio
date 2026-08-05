@@ -7,15 +7,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#0B0B0F",
-        surface: "#14141A",
-        "glass-card": "rgba(255,255,255,0.06)",
-        "primary-gold": "#D4AF37",
-        "secondary-gold": "#F4C542",
-        silver: "#C9CDD4",
-        "primary-text": "#F8F9FA",
-        "secondary-text": "#9CA3AF",
-        "accent-blue": "#4F8CFF"
+        background: "var(--color-background)",
+        surface: "var(--color-surface)",
+        "glass-card": "var(--color-glass-card)",
+        "primary-gold": "var(--color-primary-gold)",
+        "secondary-gold": "var(--color-secondary-gold)",
+        silver: "var(--color-silver)",
+        "primary-text": "var(--color-primary-text)",
+        "secondary-text": "var(--color-secondary-text)",
+        "accent-blue": "var(--color-accent-blue)"
       },
       animation: {
         "float": "float 6s ease-in-out infinite",

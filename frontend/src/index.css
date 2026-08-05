@@ -2,6 +2,18 @@
 @config "../tailwind.config.js";
 
 @layer base {
+  :root {
+    --color-background: #0B0B0F;
+    --color-surface: #14141A;
+    --color-glass-card: rgba(255,255,255,0.06);
+    --color-primary-gold: #D4AF37;
+    --color-secondary-gold: #F4C542;
+    --color-silver: #C9CDD4;
+    --color-primary-text: #F8F9FA;
+    --color-secondary-text: #9CA3AF;
+    --color-accent-blue: #4F8CFF;
+  }
+  
   body {
     @apply bg-background text-primary-text font-sans antialiased overflow-x-hidden cursor-none;
   }

@@ -1,7 +1,8 @@
-import { useEffect, useRef, lazy, Suspense } from 'react';
+import { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import axios from 'axios';
 const CinematicScene = lazy(() => import('../components/3d/Scene'));
 import { MagneticButton } from '../components/ui/MagneticButton';
 import { Link } from 'react-router-dom';
@@ -11,8 +12,25 @@ gsap.registerPlugin(ScrollTrigger);
 const Home = () => {
   const heroTextRef = useRef(null);
   const statsRef = useRef(null);
+  const [homeSettings, setHomeSettings] = useState<any>({
+    heroTitle: "This isn't just editing.",
+    heroSubtitle: "This is BroCrewz.",
+    heroDescription: "We stand for Creative Editing, Visual Storytelling & YouTube Growth. Transforming raw footage into powerful stories.",
+    ctaText: "View Our Plans",
+    ctaLink: "/services"
+  });
 
   useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await axios.get('/api/public/settings/home');
+        if (res.data) setHomeSettings(res.data);
+      } catch {
+        // Fallback to empty state
+      }
+    };
+    fetchSettings();
+
     gsap.fromTo(
       ".hero-text",
       { opacity: 0, y: 50 },
@@ -48,16 +66,16 @@ const Home = () => {
           <motion.div ref={heroTextRef}>
             <p className="hero-text text-primary-gold font-bold tracking-widest uppercase mb-4 text-sm md:text-base">Built by brothers. Driven by creativity.</p>
             <h1 className="hero-text text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter uppercase drop-shadow-2xl">
-              This isn't just editing.<br />
-              <span className="text-gradient-gold">This is BroCrewz.</span>
+              {homeSettings.heroTitle}<br />
+              <span className="text-gradient-gold">{homeSettings.heroSubtitle}</span>
             </h1>
             <p className="hero-text text-xl md:text-2xl text-silver mb-10 max-w-2xl mx-auto">
-              We stand for Creative Editing, Visual Storytelling & YouTube Growth. Transforming raw footage into powerful stories.
+              {homeSettings.heroDescription}
             </p>
             <div className="hero-text">
               <MagneticButton>
-                <Link to="/services" className="inline-block bg-primary-gold text-background px-8 py-4 rounded-full font-bold text-lg hover:bg-secondary-gold transition-colors shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-                  View Our Plans
+                <Link to={homeSettings.ctaLink || '/services'} className="inline-block bg-primary-gold text-background px-8 py-4 rounded-full font-bold text-lg hover:bg-secondary-gold transition-colors shadow-[0_0_20px_rgba(212,175,55,0.4)]">
+                  {homeSettings.ctaText || 'View Our Plans'}
                 </Link>
               </MagneticButton>
             </div>

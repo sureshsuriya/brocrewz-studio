@@ -1,8 +1,28 @@
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MagneticButton } from '../components/ui/MagneticButton';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const About = () => {
+  const [aboutSettings, setAboutSettings] = useState<any>({
+    storyText: "Every late night, every revision, every frame has shaped who we are.",
+    missionText: "Together as brothers, we transform raw footage into powerful stories that leave an impact. We don't just cut clips together; we are editors, creators, and visual storytellers dedicated to YouTube Growth.",
+    visionText: ""
+  });
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await axios.get('/api/public/settings/about');
+        if (res.data) setAboutSettings(res.data);
+      } catch {
+        // Fallback to empty state
+      }
+    };
+    fetchSettings();
+  }, []);
+
   return (
     <div className="w-full">
       {/* Main Story Section */}
@@ -10,13 +30,18 @@ const About = () => {
         <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
           <h2 className="text-5xl font-black text-white mb-6 uppercase tracking-tighter">Our <span className="text-gradient-gold">Story</span></h2>
           
-          <p className="text-lg text-silver leading-relaxed mb-6 font-medium">
-            Every late night, every revision, every frame has shaped who we are.
+          <p className="text-lg text-silver leading-relaxed mb-6 font-medium whitespace-pre-line">
+            {aboutSettings.storyText}
           </p>
           
-          <p className="text-lg text-secondary-text leading-relaxed mb-6">
-            Together as brothers, we transform raw footage into powerful stories that leave an impact. We don't just cut clips together; we are editors, creators, and visual storytellers dedicated to YouTube Growth.
+          <p className="text-lg text-secondary-text leading-relaxed mb-6 whitespace-pre-line">
+            {aboutSettings.missionText}
           </p>
+          {aboutSettings.visionText && (
+            <p className="text-lg text-secondary-text leading-relaxed mb-6 whitespace-pre-line">
+              {aboutSettings.visionText}
+            </p>
+          )}
           
           <div className="grid grid-cols-2 gap-4 mb-8">
              <div className="glass-card-premium p-4 text-center">
