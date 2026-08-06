@@ -53,10 +53,11 @@ public class SecurityConfig {
                 if (allowedOrigins != null && !allowedOrigins.isEmpty()) {
                     config.setAllowedOrigins(List.of(allowedOrigins.split(",")));
                 } else {
-                    config.setAllowedOrigins(List.of("*")); // Fallback for dev
+                    config.setAllowedOriginPatterns(List.of("*")); // Allows any deployed frontend origin
                 }
                 config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                 config.setAllowedHeaders(List.of("*"));
+                config.setAllowCredentials(true);
                 return config;
             }))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

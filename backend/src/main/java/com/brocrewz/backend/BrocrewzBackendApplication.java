@@ -27,6 +27,8 @@ public class BrocrewzBackendApplication {
 			UserRepository userRepository,
 			ServicePlanRepository servicePlanRepository,
 			TeamMemberRepository teamMemberRepository,
+			com.brocrewz.backend.repository.HomeSettingsRepository homeSettingsRepository,
+			com.brocrewz.backend.repository.AboutSettingsRepository aboutSettingsRepository,
 			PasswordEncoder passwordEncoder) {
 		return args -> {
 			if (userRepository.findByEmail("admin@brocrewz.com").isEmpty()) {
@@ -36,6 +38,23 @@ public class BrocrewzBackendApplication {
 						.role("ADMIN")
 						.build();
 				userRepository.save(admin);
+			}
+
+			if (homeSettingsRepository.count() == 0) {
+				homeSettingsRepository.save(com.brocrewz.backend.entity.HomeSettings.builder()
+						.heroTitle("This isn't just editing.")
+						.heroSubtitle("This is BroCrewz.")
+						.heroDescription("We stand for Creative Editing, Visual Storytelling & YouTube Growth. Transforming raw footage into powerful stories.")
+						.ctaPrimaryText("View Our Plans")
+						.ctaPrimaryLink("/services")
+						.build());
+			}
+
+			if (aboutSettingsRepository.count() == 0) {
+				aboutSettingsRepository.save(com.brocrewz.backend.entity.AboutSettings.builder()
+						.companyStory("Every late night, every revision, every frame has shaped who we are.")
+						.mission("Together as brothers, we transform raw footage into powerful stories that leave an impact. We don't just cut clips together; we are editors, creators, and visual storytellers dedicated to YouTube Growth.")
+						.build());
 			}
 
 			if (servicePlanRepository.count() == 0) {
