@@ -31,12 +31,17 @@ public class BrocrewzBackendApplication {
 			com.brocrewz.backend.repository.AboutSettingsRepository aboutSettingsRepository,
 			PasswordEncoder passwordEncoder) {
 		return args -> {
-			if (userRepository.findByEmail("admin@brocrewz.com").isEmpty()) {
+			Optional<User> adminOpt = userRepository.findByEmail("admin@brocrewz.com");
+			if (adminOpt.isEmpty()) {
 				User admin = User.builder()
 						.email("admin@brocrewz.com")
 						.password(passwordEncoder.encode("admin123"))
 						.role("ADMIN")
 						.build();
+				userRepository.save(admin);
+			} else {
+				User admin = adminOpt.get();
+				admin.setPassword(passwordEncoder.encode("admin123"));
 				userRepository.save(admin);
 			}
 

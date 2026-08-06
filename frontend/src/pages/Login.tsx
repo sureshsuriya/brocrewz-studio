@@ -19,10 +19,18 @@ const Login = () => {
       toast.success('Successfully logged in!');
       navigate('/admin');
     } catch (err: any) {
-      if (err.response && err.response.status === 401) {
-        toast.error('Invalid credentials');
+      if (err.response) {
+        if (err.response.status === 401) {
+          toast.error('Invalid credentials. Default email: admin@brocrewz.com');
+        } else if (err.response.status === 404) {
+          toast.error('API endpoint not found. Ensure VITE_API_BASE_URL is set in Vercel environment variables.');
+        } else {
+          toast.error(`Login failed (HTTP ${err.response.status}). Please try again.`);
+        }
+      } else if (err.request) {
+        toast.error('Network error: Unable to connect to backend API server.');
       } else {
-        toast.error('An unexpected error occurred. Please try again later.');
+        toast.error('An unexpected error occurred. Please try again.');
       }
     } finally {
       setIsLoading(false);
