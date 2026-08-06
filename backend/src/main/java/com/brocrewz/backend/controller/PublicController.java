@@ -65,4 +65,30 @@ public class PublicController {
     public ResponseEntity<?> getAboutSettings() {
         return ResponseEntity.ok(aboutRepo.findAll().stream().findFirst().orElse(null));
     }
+
+    @Autowired private javax.sql.DataSource dataSource;
+    @Autowired private org.springframework.core.env.Environment env;
+
+    @GetMapping("/health")
+    public ResponseEntity<?> getHealthInfo() {
+        java.util.Map<String, Object> status = new java.util.HashMap<>();
+        try (java.sql.Connection conn = dataSource.getConnection()) {
+            java.sql.DatabaseMetaData meta = conn.getMetaData();
+            status.put("databaseProduct", meta.getDatabaseProductName());
+            status.put("databaseVersion", meta.getDatabaseProductVersion());
+            status.put("driverName", meta.getDriverName());
+            status.put("driverVersion", meta.getDriverVersion());
+            
+            String rawUrl = meta.getURL();
+            String maskedUrl = rawUrl != null ? rawUrl.replaceAll("password=[^&]*", "password=***") : "N/A";
+            status.put("datasourceUrl", maskedUrl);
+            status.put("activeProfiles", env.getActiveProfiles());
+            status.put("status", "UP");
+            status.put("isPersistentDatabase", !meta.getDatabaseProductName().toLowerCase().contains("h2"));
+        } catch (Exception e) {
+            status.put("status", "ERROR");
+            status.put("error", e.getMessage());
+        }
+        return ResponseEntity.ok(status);
+    }
 }
