@@ -2,6 +2,7 @@ package com.brocrewz.backend.repository;
 
 import com.brocrewz.backend.entity.AnalyticsEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -26,4 +27,8 @@ public interface AnalyticsEventRepository extends JpaRepository<AnalyticsEvent, 
     Optional<AnalyticsEvent> findTopByVisitorIdOrderByTimestampDesc(String visitorId);
 
     List<AnalyticsEvent> findByTimestampAfter(LocalDateTime cutoff);
+
+    @Modifying
+    @Query("DELETE FROM AnalyticsEvent a")
+    void deleteAllAnalyticsEvents();
 }

@@ -108,10 +108,12 @@ public class AdminSettingsController {
         return ResponseEntity.ok(stats);
     }
 
+    @org.springframework.transaction.annotation.Transactional
     @DeleteMapping("/analytics/reset")
     public ResponseEntity<?> resetAnalytics() {
-        analyticsRepo.deleteAll();
-        return ResponseEntity.ok().build();
+        analyticsRepo.deleteAllAnalyticsEvents();
+        analyticsRepo.flush();
+        return ResponseEntity.ok(Map.of("message", "All analytics reset successfully", "deleted", true));
     }
 
     // --- File Upload ---

@@ -40,6 +40,18 @@ export default function AdminDashboard() {
       await axios.delete('/api/admin/analytics/reset', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
+      setStats((prev: any) => ({
+        ...prev,
+        totalVisitors: 0,
+        totalEvents: 0,
+        totalPageViews: 0,
+        activeSessions: 0,
+        pageViews: { home: 0, about: 0, services: 0, portfolio: 0, team: 0, testimonials: 0, faq: 0, contact: 0 },
+        timeStats: { today: 0, thisWeek: 0, thisMonth: 0 },
+        deviceBreakdown: {},
+        browserBreakdown: {},
+        visitorTraffic: []
+      }));
       toast.success("Analytics reset successfully");
       fetchStats();
     } catch {
