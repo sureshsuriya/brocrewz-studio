@@ -1,5 +1,7 @@
+import { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
+import LoadingSkeleton from './LoadingSkeleton';
 
 const PageTransition = ({ children }: { children: ReactNode }) => {
   return (
@@ -11,7 +13,9 @@ const PageTransition = ({ children }: { children: ReactNode }) => {
       className="w-full h-full"
       style={{ gridArea: '1 / 1 / 2 / 2' }}
     >
-      {children}
+      <Suspense fallback={<LoadingSkeleton />}>
+        {children}
+      </Suspense>
     </motion.div>
   );
 };

@@ -1,4 +1,4 @@
-import { useEffect, useRef, lazy, Suspense } from 'react';
+import { useEffect, useRef, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Lenis from '@studio-freight/lenis';
 import Navbar from './components/Navbar';
@@ -9,7 +9,7 @@ import PageTransition from './components/PageTransition';
 import { ThemeProvider } from './components/ThemeProvider';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 import NotFound from './pages/NotFound';
-import LoadingSkeleton from './components/LoadingSkeleton';
+import ScrollToTop from './components/ScrollToTop';
 
 // Lazy loaded pages
 const Home = lazy(() => import('./pages/Home'));
@@ -92,6 +92,9 @@ function App() {
       infinite: false,
     });
 
+    // Expose lenis globally so ScrollToTop can call lenis.scrollTo(0)
+    (window as any).lenis = lenis;
+
     function raf(time: number) {
       lenis.raf(time);
       requestAnimationFrame(raf);
@@ -112,6 +115,7 @@ function App() {
     window.addEventListener("mousemove", onMouseMove);
 
     return () => {
+      (window as any).lenis = null;
       lenis.destroy();
       window.removeEventListener("mousemove", onMouseMove);
     };
@@ -120,13 +124,12 @@ function App() {
   return (
     <ThemeProvider>
       <Router>
+        <ScrollToTop />
         <div className="flex flex-col min-h-screen bg-background text-primary-text">
           <div ref={cursorRef} className="custom-cursor hidden md:block" />
           <Navbar />
           <main className="flex-grow pt-20 grid" style={{ gridTemplateColumns: '1fr', gridTemplateRows: '1fr' }}>
-            <Suspense fallback={<LoadingSkeleton />}>
-              <AnimatedRoutes />
-            </Suspense>
+            <AnimatedRoutes />
           </main>
           <Footer />
         </div>

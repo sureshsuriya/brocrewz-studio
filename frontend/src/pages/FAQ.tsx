@@ -38,39 +38,51 @@ const FAQ = () => {
       </motion.div>
 
       <div className="space-y-4">
-        {faqs.map((faq, index) => (
-          <motion.div 
-            key={index}
+        {faqs.length === 0 ? (
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="glass-card-premium overflow-hidden border-white/5 hover:border-primary-gold/30 transition-colors"
+            className="text-center py-16 glass-card-premium"
           >
-            <button 
-              onClick={() => toggleFaq(index)}
-              className="w-full text-left p-6 flex justify-between items-center focus:outline-none"
-            >
-              <h3 className="text-lg md:text-xl font-bold text-white pr-8">{faq.question}</h3>
-              <span className={`text-primary-gold text-2xl transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`}>
-                ↓
-              </span>
-            </button>
-            <AnimatePresence>
-              {openIndex === index && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="p-6 pt-0 text-silver text-sm md:text-base leading-relaxed border-t border-white/10 mt-2">
-                    {faq.answer}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <div className="text-5xl mb-4">❓</div>
+            <h3 className="text-xl font-bold text-white mb-2">No FAQs available yet.</h3>
+            <p className="text-secondary-text text-sm">Check back soon — we're preparing answers to common questions.</p>
           </motion.div>
-        ))}
+        ) : (
+          faqs.map((faq, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="glass-card-premium overflow-hidden border-white/5 hover:border-primary-gold/30 transition-colors"
+            >
+              <button
+                onClick={() => toggleFaq(index)}
+                className="w-full text-left p-6 flex justify-between items-center focus:outline-none"
+              >
+                <h3 className="text-lg md:text-xl font-bold text-white pr-8">{faq.question}</h3>
+                <span className={`text-primary-gold text-2xl transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`}>
+                  ↓
+                </span>
+              </button>
+              <AnimatePresence>
+                {openIndex === index && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="p-6 pt-0 text-silver text-sm md:text-base leading-relaxed border-t border-white/10 mt-2">
+                      {faq.answer}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ))
+        )}
       </div>
 
       <motion.div 

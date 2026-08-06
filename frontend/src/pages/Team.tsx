@@ -77,7 +77,12 @@ const Team = () => {
                 <p className="text-xs text-zinc-400 mb-2 px-2 line-clamp-2" title={member.skills}>{member.skills}</p>
               )}
               {member.phone && (
-                <p className="text-xs text-primary-gold/80 mb-3 font-mono">{member.phone}</p>
+                <a
+                  href={`tel:${member.phone.replace(/\s/g, '')}`}
+                  className="text-xs text-primary-gold/80 mb-3 font-mono hover:text-primary-gold transition-colors"
+                >
+                  {member.phone}
+                </a>
               )}
               
               <div className="mt-auto">

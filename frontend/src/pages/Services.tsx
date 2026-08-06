@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { MagneticButton } from '../components/ui/MagneticButton';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const CheckIcon = () => (
@@ -74,9 +75,9 @@ const Services = () => {
                   </ul>
                 </div>
                 <MagneticButton className="w-full mt-auto">
-                  <a href="/contact" className={`block text-center w-full py-4 rounded-full font-bold transition-all text-sm ${isPopular ? 'bg-primary-gold text-background hover:bg-secondary-gold' : 'bg-white/5 text-white hover:bg-white/10'}`}>
+                  <Link to="/contact" className={`block text-center w-full py-4 rounded-full font-bold transition-all text-sm ${isPopular ? 'bg-primary-gold text-background hover:bg-secondary-gold' : 'bg-white/5 text-white hover:bg-white/10'}`}>
                     DM to Book
-                  </a>
+                  </Link>
                 </MagneticButton>
               </div>
             </motion.div>
@@ -107,9 +108,9 @@ const Services = () => {
                   <div className="text-xl font-black text-primary-gold">
                     {isLogo ? `Starts from ₹${service.price}` : `₹${service.price}`}
                   </div>
-                  <a href="/contact" className="text-xs font-bold text-white hover:text-primary-gold uppercase tracking-wider transition-colors">
+                  <Link to="/contact" className="text-xs font-bold text-white hover:text-primary-gold uppercase tracking-wider transition-colors">
                     Book &rarr;
-                  </a>
+                  </Link>
                 </div>
               </motion.div>
             );
