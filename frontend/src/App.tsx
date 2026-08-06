@@ -37,42 +37,46 @@ const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const UserSettings = lazy(() => import('./pages/admin/UserSettings'));
 const ActivityLogs = lazy(() => import('./pages/admin/ActivityLogs'));
 
+import ErrorBoundary from './components/ErrorBoundary';
+
 function AnimatedRoutes() {
   const location = useLocation();
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<PageTransition><Home /></PageTransition>} />
-        <Route path="/about" element={<PageTransition><About /></PageTransition>} />
-        <Route path="/services" element={<PageTransition><Services /></PageTransition>} />
-        <Route path="/portfolio" element={<PageTransition><Portfolio /></PageTransition>} />
-        <Route path="/team" element={<PageTransition><Team /></PageTransition>} />
-        <Route path="/testimonials" element={<PageTransition><Testimonials /></PageTransition>} />
-        <Route path="/faq" element={<PageTransition><FAQ /></PageTransition>} />
-        <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
-        <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
-        <Route path="/forgot-password" element={<PageTransition><ForgotPassword /></PageTransition>} />
-        <Route path="/reset-password" element={<PageTransition><ResetPassword /></PageTransition>} />
-        
-        <Route path="/admin" element={<ProtectedRoute><PageTransition><AdminDashboard /></PageTransition></ProtectedRoute>} />
-        <Route path="/admin/settings" element={<ProtectedRoute><PageTransition><AdminSettings /></PageTransition></ProtectedRoute>} />
-        <Route path="/admin/site" element={<ProtectedRoute><PageTransition><AdminSettings /></PageTransition></ProtectedRoute>} />
-        <Route path="/admin/home" element={<ProtectedRoute><PageTransition><HomeConfig /></PageTransition></ProtectedRoute>} />
-        <Route path="/admin/about" element={<ProtectedRoute><PageTransition><AboutConfig /></PageTransition></ProtectedRoute>} />
-        <Route path="/admin/faq" element={<ProtectedRoute><PageTransition><FaqConfig /></PageTransition></ProtectedRoute>} />
-        <Route path="/admin/services" element={<ProtectedRoute><PageTransition><ServicesConfig /></PageTransition></ProtectedRoute>} />
-        <Route path="/admin/portfolio" element={<ProtectedRoute><PageTransition><PortfolioConfig /></PageTransition></ProtectedRoute>} />
-        <Route path="/admin/team" element={<ProtectedRoute><PageTransition><TeamConfig /></PageTransition></ProtectedRoute>} />
-        <Route path="/admin/testimonials" element={<ProtectedRoute><PageTransition><TestimonialsConfig /></PageTransition></ProtectedRoute>} />
-        <Route path="/admin/media" element={<ProtectedRoute><PageTransition><MediaLibrary /></PageTransition></ProtectedRoute>} />
-        <Route path="/admin/crm" element={<ProtectedRoute><PageTransition><CRMConfig /></PageTransition></ProtectedRoute>} />
-        <Route path="/admin/users" element={<ProtectedRoute><PageTransition><UserSettings /></PageTransition></ProtectedRoute>} />
-        <Route path="/admin/activities" element={<ProtectedRoute><PageTransition><ActivityLogs /></PageTransition></ProtectedRoute>} />
-        
-        {/* 404 Route */}
-        <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
-      </Routes>
-    </AnimatePresence>
+    <ErrorBoundary>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+          <Route path="/about" element={<PageTransition><About /></PageTransition>} />
+          <Route path="/services" element={<PageTransition><Services /></PageTransition>} />
+          <Route path="/portfolio" element={<PageTransition><Portfolio /></PageTransition>} />
+          <Route path="/team" element={<PageTransition><Team /></PageTransition>} />
+          <Route path="/testimonials" element={<PageTransition><Testimonials /></PageTransition>} />
+          <Route path="/faq" element={<PageTransition><FAQ /></PageTransition>} />
+          <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+          <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
+          <Route path="/forgot-password" element={<PageTransition><ForgotPassword /></PageTransition>} />
+          <Route path="/reset-password" element={<PageTransition><ResetPassword /></PageTransition>} />
+          
+          <Route path="/admin" element={<ProtectedRoute><PageTransition><AdminDashboard /></PageTransition></ProtectedRoute>} />
+          <Route path="/admin/settings" element={<ProtectedRoute><PageTransition><AdminSettings /></PageTransition></ProtectedRoute>} />
+          <Route path="/admin/site" element={<ProtectedRoute><PageTransition><AdminSettings /></PageTransition></ProtectedRoute>} />
+          <Route path="/admin/home" element={<ProtectedRoute><PageTransition><HomeConfig /></PageTransition></ProtectedRoute>} />
+          <Route path="/admin/about" element={<ProtectedRoute><PageTransition><AboutConfig /></PageTransition></ProtectedRoute>} />
+          <Route path="/admin/faq" element={<ProtectedRoute><PageTransition><FaqConfig /></PageTransition></ProtectedRoute>} />
+          <Route path="/admin/services" element={<ProtectedRoute><PageTransition><ServicesConfig /></PageTransition></ProtectedRoute>} />
+          <Route path="/admin/portfolio" element={<ProtectedRoute><PageTransition><PortfolioConfig /></PageTransition></ProtectedRoute>} />
+          <Route path="/admin/team" element={<ProtectedRoute><PageTransition><TeamConfig /></PageTransition></ProtectedRoute>} />
+          <Route path="/admin/testimonials" element={<ProtectedRoute><PageTransition><TestimonialsConfig /></PageTransition></ProtectedRoute>} />
+          <Route path="/admin/media" element={<ProtectedRoute><PageTransition><MediaLibrary /></PageTransition></ProtectedRoute>} />
+          <Route path="/admin/crm" element={<ProtectedRoute><PageTransition><CRMConfig /></PageTransition></ProtectedRoute>} />
+          <Route path="/admin/users" element={<ProtectedRoute><PageTransition><UserSettings /></PageTransition></ProtectedRoute>} />
+          <Route path="/admin/activities" element={<ProtectedRoute><PageTransition><ActivityLogs /></PageTransition></ProtectedRoute>} />
+          
+          {/* 404 Route */}
+          <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+        </Routes>
+      </AnimatePresence>
+    </ErrorBoundary>
   );
 }
 
@@ -95,11 +99,12 @@ function App() {
     // Expose lenis globally so ScrollToTop can call lenis.scrollTo(0)
     (window as any).lenis = lenis;
 
+    let rafId: number;
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
     // Custom Cursor
     const onMouseMove = (e: MouseEvent) => {
@@ -116,25 +121,28 @@ function App() {
 
     return () => {
       (window as any).lenis = null;
+      cancelAnimationFrame(rafId);
       lenis.destroy();
       window.removeEventListener("mousemove", onMouseMove);
     };
   }, []);
 
   return (
-    <ThemeProvider>
-      <Router>
-        <ScrollToTop />
-        <div className="flex flex-col min-h-screen bg-background text-primary-text">
-          <div ref={cursorRef} className="custom-cursor hidden md:block" />
-          <Navbar />
-          <main className="flex-grow pt-20 grid" style={{ gridTemplateColumns: '1fr', gridTemplateRows: '1fr' }}>
-            <AnimatedRoutes />
-          </main>
-          <Footer />
-        </div>
-      </Router>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <Router>
+          <ScrollToTop />
+          <div className="flex flex-col min-h-screen bg-background text-primary-text">
+            <div ref={cursorRef} className="custom-cursor hidden md:block" />
+            <Navbar />
+            <main className="flex-grow pt-20 grid" style={{ gridTemplateColumns: '1fr', gridTemplateRows: '1fr' }}>
+              <AnimatedRoutes />
+            </main>
+            <Footer />
+          </div>
+        </Router>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }
 export default App;

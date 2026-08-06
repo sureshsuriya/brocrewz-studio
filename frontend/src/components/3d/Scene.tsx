@@ -1,5 +1,5 @@
 
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -47,10 +47,13 @@ const SimpleParticles = () => {
   });
 
   const particlesCount = 200;
-  const posArray = new Float32Array(particlesCount * 3);
-  for(let i = 0; i < particlesCount * 3; i++) {
-    posArray[i] = (Math.random() - 0.5) * 20;
-  }
+  const posArray = useMemo(() => {
+    const arr = new Float32Array(particlesCount * 3);
+    for (let i = 0; i < particlesCount * 3; i++) {
+      arr[i] = (Math.random() - 0.5) * 20;
+    }
+    return arr;
+  }, []);
 
   return (
     <points ref={pointsRef}>
@@ -71,7 +74,11 @@ const SimpleParticles = () => {
 
 const CinematicScene = () => {
   return (
-    <Canvas camera={{ position: [0, 0, 8], fov: 45 }} className="w-full h-full">
+    <Canvas 
+      camera={{ position: [0, 0, 8], fov: 45 }} 
+      className="w-full h-full"
+      gl={{ powerPreference: "high-performance", antialias: true }}
+    >
       {/* @ts-ignore */}
       <ambientLight intensity={0.5} />
       {/* @ts-ignore */}
