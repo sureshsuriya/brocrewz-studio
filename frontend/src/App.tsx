@@ -38,9 +38,32 @@ const UserSettings = lazy(() => import('./pages/admin/UserSettings'));
 const ActivityLogs = lazy(() => import('./pages/admin/ActivityLogs'));
 
 import ErrorBoundary from './components/ErrorBoundary';
+import axios from 'axios';
+
+function getOrCreateClientSessionId() {
+  let sessionId = localStorage.getItem('brocrewz_client_session_id');
+  if (!sessionId) {
+    sessionId = 'cs_' + Math.random().toString(36).substring(2, 11) + Date.now().toString(36);
+    localStorage.setItem('brocrewz_client_session_id', sessionId);
+  }
+  return sessionId;
+}
 
 function AnimatedRoutes() {
   const location = useLocation();
+
+  useEffect(() => {
+    const path = location.pathname;
+    // Track public routes only
+    if (!path.startsWith('/admin') && !path.startsWith('/login') && !path.startsWith('/forgot-password') && !path.startsWith('/reset-password')) {
+      const clientSessionId = getOrCreateClientSessionId();
+      axios.post('/api/public/analytics/track', {
+        clientSessionId,
+        pagePath: path
+      }).catch(() => {});
+    }
+  }, [location.pathname]);
+
   return (
     <ErrorBoundary>
       <AnimatePresence mode="wait">

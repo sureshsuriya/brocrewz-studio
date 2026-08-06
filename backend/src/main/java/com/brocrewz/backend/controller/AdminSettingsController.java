@@ -40,26 +40,60 @@ public class AdminSettingsController {
     @GetMapping("/analytics")
     public ResponseEntity<?> getAnalytics() {
         Map<String, Object> stats = new HashMap<>();
-        stats.put("totalVisitors", analyticsRepo.countUniqueVisitors());
-        stats.put("totalEvents", analyticsRepo.count());
-        stats.put("contactRequests", contactRepo.count());
-        stats.put("activeSessions", analyticsRepo.countActiveSessions(java.time.LocalDateTime.now().minusMinutes(15)));
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
 
-        // Generate visitor traffic for the last 7 days dynamically
-        java.time.LocalDateTime cutoff = java.time.LocalDateTime.now().minusDays(6).withHour(0).withMinute(0).withSecond(0).withNano(0);
-        List<AnalyticsEvent> events = analyticsRepo.findByTimestampAfter(cutoff);
+        long totalVisitors = analyticsRepo.countUniqueVisitors();
+        long totalEvents = analyticsRepo.count();
+        long activeSessions = analyticsRepo.countActiveSessions(now.minusMinutes(15));
+        long contactRequests = contactRepo.count();
 
+        stats.put("totalVisitors", totalVisitors);
+        stats.put("totalEvents", totalEvents);
+        stats.put("totalPageViews", totalEvents);
+        stats.put("activeSessions", activeSessions);
+        stats.put("contactRequests", contactRequests);
+
+        // Page View Breakdown
+        Map<String, Long> pageViews = new HashMap<>();
+        pageViews.put("home", analyticsRepo.countByPagePath("/") + analyticsRepo.countByPagePath("/home"));
+        pageViews.put("about", analyticsRepo.countByPagePath("/about"));
+        pageViews.put("services", analyticsRepo.countByPagePath("/services"));
+        pageViews.put("portfolio", analyticsRepo.countByPagePath("/portfolio"));
+        pageViews.put("team", analyticsRepo.countByPagePath("/team"));
+        pageViews.put("testimonials", analyticsRepo.countByPagePath("/testimonials"));
+        pageViews.put("faq", analyticsRepo.countByPagePath("/faq"));
+        pageViews.put("contact", analyticsRepo.countByPagePath("/contact"));
+        stats.put("pageViews", pageViews);
+
+        // Time Breakdown
+        Map<String, Long> timeStats = new HashMap<>();
+        timeStats.put("today", analyticsRepo.countUniqueVisitorsAfter(now.withHour(0).withMinute(0).withSecond(0)));
+        timeStats.put("thisWeek", analyticsRepo.countUniqueVisitorsAfter(now.minusDays(7)));
+        timeStats.put("thisMonth", analyticsRepo.countUniqueVisitorsAfter(now.minusDays(30)));
+        stats.put("timeStats", timeStats);
+
+        // Device & Browser Breakdown
+        List<AnalyticsEvent> allEvents = analyticsRepo.findAll();
+        Map<String, Long> deviceBreakdown = allEvents.stream()
+                .collect(java.util.stream.Collectors.groupingBy(e -> e.getDeviceType() != null ? e.getDeviceType() : "Desktop", java.util.stream.Collectors.counting()));
+        Map<String, Long> browserBreakdown = allEvents.stream()
+                .collect(java.util.stream.Collectors.groupingBy(e -> e.getBrowser() != null ? e.getBrowser() : "Chrome", java.util.stream.Collectors.counting()));
+        
+        stats.put("deviceBreakdown", deviceBreakdown);
+        stats.put("browserBreakdown", browserBreakdown);
+
+        // Visitor traffic (Last 7 days)
+        java.time.LocalDateTime cutoff = now.minusDays(6).withHour(0).withMinute(0).withSecond(0).withNano(0);
+        List<AnalyticsEvent> events7Days = analyticsRepo.findByTimestampAfter(cutoff);
         java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("EEE");
         List<Map<String, Object>> traffic = new java.util.ArrayList<>();
         
         for (int i = 6; i >= 0; i--) {
             java.time.LocalDate date = java.time.LocalDate.now().minusDays(i);
             String dayName = date.format(formatter);
-            
-            // Count unique visitor IPs for this specific day
-            long visitors = events.stream()
-                .filter(e -> e.getTimestamp().toLocalDate().equals(date))
-                .map(AnalyticsEvent::getIpAddress)
+            long visitors = events7Days.stream()
+                .filter(e -> e.getTimestamp() != null && e.getTimestamp().toLocalDate().equals(date))
+                .map(e -> e.getVisitorId() != null ? e.getVisitorId() : e.getIpAddress())
                 .filter(java.util.Objects::nonNull)
                 .distinct()
                 .count();
@@ -72,6 +106,12 @@ public class AdminSettingsController {
         stats.put("visitorTraffic", traffic);
 
         return ResponseEntity.ok(stats);
+    }
+
+    @DeleteMapping("/analytics/reset")
+    public ResponseEntity<?> resetAnalytics() {
+        analyticsRepo.deleteAll();
+        return ResponseEntity.ok().build();
     }
 
     // --- File Upload ---
