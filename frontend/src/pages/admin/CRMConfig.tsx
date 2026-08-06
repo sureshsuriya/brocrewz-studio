@@ -59,6 +59,19 @@ export default function CRMConfig() {
     }
   };
 
+  const handleClearAll = async () => {
+    try {
+      for (const msg of messages) {
+        await axios.delete(`/api/admin/contacts/${msg.id}`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+      }
+      toast.success("All messages cleared");
+      fetchMessages();
+      setSelectedMsg(null);
+    } catch {
+      toast.error("Failed to clear messages");
+    }
+  };
+
   const handleExport = () => {
     exportToCSV(filtered, 'brocrewz_contacts');
   };
@@ -73,11 +86,19 @@ export default function CRMConfig() {
           <p className="text-zinc-400 mt-1">Manage all client inquiries</p>
         </div>
         <div className="flex gap-4 items-center">
+          {messages.length > 0 && (
+            <button 
+              onClick={handleClearAll}
+              className="flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 px-4 py-2.5 rounded-lg font-medium transition-colors border border-red-500/20 text-sm"
+            >
+              <Trash2 size={16} /> Clear Test Messages
+            </button>
+          )}
           <button 
             onClick={handleExport}
-            className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-2.5 rounded-lg font-medium transition-colors border border-zinc-700"
+            className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-2.5 rounded-lg font-medium transition-colors border border-zinc-700 text-sm"
           >
-            <Download size={18} /> Export CSV
+            <Download size={16} /> Export CSV
           </button>
           <div className="relative w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />

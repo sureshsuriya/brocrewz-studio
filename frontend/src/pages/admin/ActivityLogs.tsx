@@ -31,11 +31,31 @@ const ActivityLogs = () => {
     fetchLogs();
   }, []);
 
+  const handleClearLogs = async () => {
+    try {
+      await axios.delete('/api/admin/activities', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+      toast.success("Activity logs cleared");
+      setLogs([]);
+    } catch {
+      toast.error("Failed to clear activity logs");
+    }
+  };
+
   if (loading) return <div className="p-6">Loading activities...</div>;
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-8">Activity Logs</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Activity Logs</h1>
+        {logs.length > 0 && (
+          <button
+            onClick={handleClearLogs}
+            className="bg-red-500/10 hover:bg-red-500/20 text-red-400 px-4 py-2 rounded-lg text-sm font-semibold border border-red-500/20 hover:border-red-500/40 transition-colors"
+          >
+            Clear Logs
+          </button>
+        )}
+      </div>
       
       <div className="bg-secondary-bg rounded-xl border border-primary-text/10 overflow-hidden">
         <div className="overflow-x-auto">

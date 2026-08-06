@@ -21,12 +21,20 @@ public class AdminSettingsController {
     @Autowired private HomeSettingsRepository homeRepo;
     @Autowired private AboutSettingsRepository aboutRepo;
     @Autowired private FaqRepository faqRepo;
-    @Autowired private FileStorageService fileService;
-    @Autowired private AnalyticsEventRepository analyticsRepo;
-    @Autowired private com.brocrewz.backend.service.ActivityLogService activityLogService;
     @Autowired private ContactMessageRepository contactRepo;
+    @Autowired private ActivityLogRepository activityLogRepo;
+    @Autowired private com.brocrewz.backend.service.ActivityLogService activityLogService;
 
-    // --- Analytics & Activities ---
+    @GetMapping("/activities")
+    public ResponseEntity<List<com.brocrewz.backend.entity.ActivityLog>> getActivities() {
+        return ResponseEntity.ok(activityLogService.getRecentActivities());
+    }
+
+    @DeleteMapping("/activities")
+    public ResponseEntity<?> clearActivities() {
+        activityLogRepo.deleteAll();
+        return ResponseEntity.ok().build();
+    }
     @GetMapping("/analytics")
     public ResponseEntity<?> getAnalytics() {
         Map<String, Object> stats = new HashMap<>();
