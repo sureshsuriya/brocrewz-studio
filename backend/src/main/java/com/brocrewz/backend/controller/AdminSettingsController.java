@@ -21,6 +21,8 @@ public class AdminSettingsController {
     @Autowired private HomeSettingsRepository homeRepo;
     @Autowired private AboutSettingsRepository aboutRepo;
     @Autowired private FaqRepository faqRepo;
+    @Autowired private FileStorageService fileService;
+    @Autowired private AnalyticsEventRepository analyticsRepo;
     @Autowired private ContactMessageRepository contactRepo;
     @Autowired private ActivityLogRepository activityLogRepo;
     @Autowired private com.brocrewz.backend.service.ActivityLogService activityLogService;
@@ -70,11 +72,6 @@ public class AdminSettingsController {
         stats.put("visitorTraffic", traffic);
 
         return ResponseEntity.ok(stats);
-    }
-
-    @GetMapping("/activities")
-    public ResponseEntity<List<com.brocrewz.backend.entity.ActivityLog>> getActivities() {
-        return ResponseEntity.ok(activityLogService.getRecentActivities());
     }
 
     // --- File Upload ---
