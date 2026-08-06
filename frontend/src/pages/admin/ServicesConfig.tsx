@@ -6,6 +6,13 @@ import { Plus, Trash2, Edit, Download } from 'lucide-react';
 import ConfirmDialog from '../../components/admin/ConfirmDialog';
 import { exportToCSV } from '../../utils/exportToCSV';
 
+const formatPrice = (price: any) => {
+  if (price === undefined || price === null || price === '') return '0';
+  const num = typeof price === 'number' ? price : parseFloat(String(price).replace(/,/g, ''));
+  if (isNaN(num)) return price;
+  return new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(num);
+};
+
 export default function ServicesConfig() {
   const [services, setServices] = useState<any[]>([]);
   const [form, setForm] = useState({ id: null, name: '', description: '', price: 0, planType: '', features: '' });
@@ -119,7 +126,7 @@ export default function ServicesConfig() {
                       <h4 className="font-bold text-zinc-100 text-lg">{service.name}</h4>
                       <span className="bg-zinc-800 text-xs px-2 py-1 rounded text-zinc-300">{service.planType}</span>
                     </div>
-                    <p className="text-primary-gold font-bold mb-2">₹{service.price}</p>
+                    <p className="text-primary-gold font-bold mb-2">₹{formatPrice(service.price)}</p>
                     <p className="text-sm text-zinc-500 mb-4 line-clamp-2">{service.description}</p>
                   </div>
                   <div className="flex gap-2 justify-end mt-4 border-t border-zinc-800 pt-4">

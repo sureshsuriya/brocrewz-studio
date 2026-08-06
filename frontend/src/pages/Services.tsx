@@ -5,18 +5,18 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const DEFAULT_SERVICES = [
-  { name: "20 Videos Plan", description: "Monthly plan for 20 long-form videos.", price: "7000.00", planType: "MONTHLY", features: "20 Long Videos, Priority Support, Dedicated Editor" },
-  { name: "20 Shorts Plan", description: "Monthly plan for 20 shorts/reels.", price: "3000.00", planType: "MONTHLY", features: "20 Shorts, Viral Hooks, Quick Turnaround" },
-  { name: "20 Videos + 20 Shorts", description: "Combined monthly plan.", price: "10000.00", planType: "MONTHLY", features: "20 Videos, 20 Shorts, Premium Support" },
-  { name: "Full Monthly Management", description: "Complete channel takeover.", price: "12000.00", planType: "MONTHLY", features: "Editing, Thumbnails, Upload, Channel Management" },
-  { name: "Single Video Editing", description: "High quality video editing for a single video.", price: "500.00", planType: "SINGLE", features: "Professional Video Editing, Color Grading, Audio Enhancement" },
-  { name: "Single Shorts Editing", description: "Engaging short-form content editing.", price: "200.00", planType: "SINGLE", features: "Shorts Editing, Captions, Motion Graphics" },
-  { name: "Thumbnail Design", description: "Clickable, high-CTR thumbnail designs.", price: "100.00", planType: "SINGLE", features: "Custom Design, Source File" },
-  { name: "Upload & Channel Management", description: "Complete channel management.", price: "200.00", planType: "SINGLE", features: "SEO Optimization, Tags, Publishing" },
-  { name: "Poster Design", description: "High quality poster design.", price: "300.00", planType: "SINGLE", features: "Custom Design, High Resolution" },
-  { name: "Flex Banner Design", description: "Print-ready flex banner designs.", price: "300.00", planType: "SINGLE", features: "CMYK format, Print Ready" },
-  { name: "Custom Frame Design", description: "Custom frame designs for videos.", price: "300.00", planType: "SINGLE", features: "Custom UI, Brand Colors" },
-  { name: "Logo Design", description: "Professional brand identity.", price: "500.00", planType: "SINGLE", features: "Vector Files, Multiple Concepts" }
+  { name: "20 Videos Plan", description: "Monthly plan for 20 long-form videos.", price: "7000", planType: "MONTHLY", features: "20 Long Videos, Priority Support, Dedicated Editor" },
+  { name: "20 Shorts Plan", description: "Monthly plan for 20 shorts/reels.", price: "3000", planType: "MONTHLY", features: "20 Shorts, Viral Hooks, Quick Turnaround" },
+  { name: "20 Videos + 20 Shorts", description: "Combined monthly plan.", price: "10000", planType: "MONTHLY", features: "20 Videos, 20 Shorts, Premium Support" },
+  { name: "Full Monthly Management", description: "Complete channel takeover.", price: "12000", planType: "MONTHLY", features: "Editing, Thumbnails, Upload, Channel Management" },
+  { name: "Single Video Editing", description: "High quality video editing for a single video.", price: "500", planType: "SINGLE", features: "Professional Video Editing, Color Grading, Audio Enhancement" },
+  { name: "Single Shorts Editing", description: "Engaging short-form content editing.", price: "200", planType: "SINGLE", features: "Shorts Editing, Captions, Motion Graphics" },
+  { name: "Thumbnail Design", description: "Clickable, high-CTR thumbnail designs.", price: "100", planType: "SINGLE", features: "Custom Design, Source File" },
+  { name: "Upload & Channel Management", description: "Complete channel management.", price: "200", planType: "SINGLE", features: "SEO Optimization, Tags, Publishing" },
+  { name: "Poster Design", description: "High quality poster design.", price: "300", planType: "SINGLE", features: "Custom Design, High Resolution" },
+  { name: "Flex Banner Design", description: "Print-ready flex banner designs.", price: "300", planType: "SINGLE", features: "CMYK format, Print Ready" },
+  { name: "Custom Frame Design", description: "Custom frame designs for videos.", price: "300", planType: "SINGLE", features: "Custom UI, Brand Colors" },
+  { name: "Logo Design", description: "Professional brand identity.", price: "500", planType: "SINGLE", features: "Vector Files, Multiple Concepts" }
 ];
 
 const CheckIcon = () => (
@@ -24,6 +24,13 @@ const CheckIcon = () => (
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
   </svg>
 );
+
+const formatPrice = (price: any) => {
+  if (price === undefined || price === null || price === '') return '0';
+  const num = typeof price === 'number' ? price : parseFloat(String(price).replace(/,/g, ''));
+  if (isNaN(num)) return price;
+  return new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(num);
+};
 
 const Services = () => {
   const [services, setServices] = useState<any[]>(DEFAULT_SERVICES);
@@ -84,7 +91,10 @@ const Services = () => {
                   {isPopular && <div className="text-xs font-bold bg-primary-gold text-background px-3 py-1 rounded-full inline-block mb-4 animate-pulse-glow">RECOMMENDED</div>}
                   <h3 className="text-2xl font-black text-white mb-2">{plan.name}</h3>
                   <p className="text-secondary-text mb-4 text-sm min-h-[40px]">{plan.description}</p>
-                  <div className="text-4xl font-black text-gradient-gold mb-6">₹{plan.price}</div>
+                  <div className="text-4xl font-black text-gradient-gold mb-6 flex items-baseline">
+                    <span>₹{formatPrice(plan.price)}</span>
+                    <span className="text-xs font-semibold text-silver ml-1 font-mono">/mo</span>
+                  </div>
                   <ul className="space-y-4 mb-8 text-sm">
                     {plan.features?.split(',').map((f: string, i: number) => (
                       <li key={i} className="flex items-start text-silver">
@@ -126,7 +136,7 @@ const Services = () => {
                 </div>
                 <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
                   <div className="text-xl font-black text-primary-gold">
-                    {isLogo ? `Starts from ₹${service.price}` : `₹${service.price}`}
+                    {isLogo ? `Starts from ₹${formatPrice(service.price)}` : `₹${formatPrice(service.price)}`}
                   </div>
                   <Link to="/contact" className="text-xs font-bold text-white hover:text-primary-gold uppercase tracking-wider transition-colors">
                     Book &rarr;
