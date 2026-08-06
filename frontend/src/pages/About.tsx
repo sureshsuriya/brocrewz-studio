@@ -4,42 +4,56 @@ import { MagneticButton } from '../components/ui/MagneticButton';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+const DEFAULT_ABOUT_SETTINGS = {
+  storyText: "Every late night, every revision, every frame has shaped who we are.",
+  missionText: "Together as brothers, we transform raw footage into powerful stories that leave an impact. We don't just cut clips together; we are editors, creators, and visual storytellers dedicated to YouTube Growth.",
+  visionText: ""
+};
+
 const About = () => {
-  const [aboutSettings, setAboutSettings] = useState<any>({
-    storyText: "Every late night, every revision, every frame has shaped who we are.",
-    missionText: "Together as brothers, we transform raw footage into powerful stories that leave an impact. We don't just cut clips together; we are editors, creators, and visual storytellers dedicated to YouTube Growth.",
-    visionText: ""
-  });
+  const [aboutSettings, setAboutSettings] = useState<any>(DEFAULT_ABOUT_SETTINGS);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchSettings = async () => {
       try {
         const res = await axios.get('/api/public/settings/about');
-        if (res.data) setAboutSettings(res.data);
+        if (res.data && isMounted) {
+          setAboutSettings({
+            storyText: res.data.companyStory || res.data.storyText || DEFAULT_ABOUT_SETTINGS.storyText,
+            missionText: res.data.mission || res.data.missionText || DEFAULT_ABOUT_SETTINGS.missionText,
+            visionText: res.data.vision || res.data.visionText || ""
+          });
+        }
       } catch {
-        // Fallback to empty state
+        // Retain default fallback state
       }
     };
     fetchSettings();
+    return () => { isMounted = false; };
   }, []);
+
+  const storyText = aboutSettings?.storyText || DEFAULT_ABOUT_SETTINGS.storyText;
+  const missionText = aboutSettings?.missionText || DEFAULT_ABOUT_SETTINGS.missionText;
+  const visionText = aboutSettings?.visionText || "";
 
   return (
     <div className="w-full">
       {/* Main Story Section */}
       <div className="max-w-7xl mx-auto px-4 py-24 grid md:grid-cols-2 gap-16 items-center">
-        <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+        <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
           <h2 className="text-5xl font-black text-white mb-6 uppercase tracking-tighter">Our <span className="text-gradient-gold">Story</span></h2>
           
           <p className="text-lg text-silver leading-relaxed mb-6 font-medium whitespace-pre-line">
-            {aboutSettings.storyText}
+            {storyText}
           </p>
           
           <p className="text-lg text-secondary-text leading-relaxed mb-6 whitespace-pre-line">
-            {aboutSettings.missionText}
+            {missionText}
           </p>
-          {aboutSettings.visionText && (
+          {visionText && (
             <p className="text-lg text-secondary-text leading-relaxed mb-6 whitespace-pre-line">
-              {aboutSettings.visionText}
+              {visionText}
             </p>
           )}
           
@@ -69,7 +83,7 @@ const About = () => {
           </MagneticButton>
         </motion.div>
         
-        <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-full min-h-[500px] glass-card-premium flex items-center justify-center p-8">
+        <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative h-full min-h-[500px] glass-card-premium flex items-center justify-center p-8">
            <div className="absolute inset-0 bg-gradient-to-br from-primary-gold/10 to-transparent rounded-2xl" />
            <div className="text-center z-10">
               <img src="/assets/logo/logo.jpg" alt="BroCrewz Studio Logo" className="h-40 md:h-56 mx-auto object-contain drop-shadow-[0_0_20px_rgba(212,175,55,0.4)] mb-4" />
@@ -83,7 +97,7 @@ const About = () => {
       <section className="bg-surface py-24 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4">
           <motion.div 
-            initial={{ opacity: 0, y: 50 }} 
+            initial={{ opacity: 0, y: 30 }} 
             whileInView={{ opacity: 1, y: 0 }} 
             viewport={{ once: true }}
             className="text-center mb-16"
@@ -109,7 +123,8 @@ const About = () => {
                   className="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 transition-opacity" 
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = 'none';
-                    (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                    const fallbackSibling = (e.target as HTMLImageElement).nextElementSibling as HTMLElement;
+                    if (fallbackSibling) fallbackSibling.classList.remove('hidden');
                   }}
                 />
                 <div className="hidden w-full h-full flex items-center justify-center text-secondary-text text-xs tracking-widest uppercase">Photo</div>

@@ -1,11 +1,15 @@
 import { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 
-export const MagneticButton = ({ children, className }: any) => {
+export const MagneticButton = ({ children, className = '' }: any) => {
   const buttonRef = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
+    // Disable magnetic GSAP physics on touch devices so touch/click events navigate instantly
+    const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    if (isTouchDevice) return;
+
     const el = buttonRef.current;
     if (!el) return;
 

@@ -2,25 +2,42 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 
+const DEFAULT_TEAM_MEMBERS = [
+  { name: "Lenin", role: "Professional Video Editor (Lead)", description: null, phone: "+91 81243 76230", skills: "Professional Video Editing, YouTube Editing, Shorts Editing, Motion Graphics, Color Grading, Audio Enhancement", imageUrl: "/assets/team/lenin.jpg", category: "TEAM", displayOrder: 1 },
+  { name: "Jerry", role: "Video Editor (Pro)", description: null, phone: null, skills: "Video Editing, YouTube Editing, Shorts Editing, Instagram Reels, Color Grading", imageUrl: "/assets/team/jerry.jpg", category: "TEAM", displayOrder: 2 },
+  { name: "Sam", role: "Video Editor (Pro)", description: null, phone: null, skills: "Professional Editing, YouTube Editing, Reels Editing, Motion Graphics", imageUrl: "/assets/team/sam.jpg", category: "TEAM", displayOrder: 3 },
+  { name: "Subbu", role: "Video Editor (Pro)", description: null, phone: null, skills: "Video Editing, YouTube Editing, Reels Editing, Shorts Editing", imageUrl: "/assets/team/subbu.jpg", category: "TEAM", displayOrder: 4 },
+  { name: "Mukesh", role: "Video Editor (Pro)", description: null, phone: null, skills: "Video Editing, Motion Graphics, Color Correction", imageUrl: "/assets/team/mukesh.jpg", category: "TEAM", displayOrder: 5 },
+  { name: "Vethams", role: "Video Editor (Pro)", description: null, phone: "+91 63803 64289", skills: "Video Editing, YouTube Editing, Reels Editing, Shorts Editing, Motion Graphics", imageUrl: "/assets/team/vethams.jpg", category: "TEAM", displayOrder: 6 },
+  { name: "Sujith", role: "Video Editor (Pro)", description: null, phone: null, skills: "Professional Editing, YouTube Editing, Shorts Editing, Color Correction", imageUrl: "/assets/team/sujith.jpg", category: "TEAM", displayOrder: 7 },
+  { name: "Suresh P", role: "Operations Manager & Web Lead", description: "Designed and developed the BroCrewz Studio website, managing the technical architecture, frontend, backend, and digital platform.", phone: null, skills: "Full Stack Web Development, System Architecture, UI/UX Design, Operations Management", imageUrl: "/assets/team/suresh.jpg", category: "TEAM", displayOrder: 8 }
+];
+
 const Team = () => {
-  const [teamMembers, setTeamMembers] = useState<any[]>([]);
+  const [teamMembers, setTeamMembers] = useState<any[]>(DEFAULT_TEAM_MEMBERS);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchTeam = async () => {
       try {
         const res = await axios.get('/api/public/team');
-        setTeamMembers(res.data);
+        if (Array.isArray(res.data) && res.data.length > 0 && isMounted) {
+          setTeamMembers(res.data);
+        }
       } catch {
-        // Fallback
+        // Retain default fallback team members
       }
     };
     fetchTeam();
+    return () => { isMounted = false; };
   }, []);
 
+  const safeMembers = Array.isArray(teamMembers) && teamMembers.length > 0 ? teamMembers : DEFAULT_TEAM_MEMBERS;
+
   // Sort strictly by displayOrder (1-8)
-  const sortedMembers = [...teamMembers].sort((a, b) => {
-    const orderA = a.displayOrder ?? 99;
-    const orderB = b.displayOrder ?? 99;
+  const sortedMembers = [...safeMembers].sort((a, b) => {
+    const orderA = a?.displayOrder ?? 99;
+    const orderB = b?.displayOrder ?? 99;
     return orderA - orderB;
   });
 
@@ -32,7 +49,8 @@ const Team = () => {
       target.src = target.src.replace('.jpeg', '.jpg');
     } else {
       target.style.display = 'none';
-      target.nextElementSibling?.classList.remove('hidden');
+      const fallbackSibling = target.nextElementSibling as HTMLElement;
+      if (fallbackSibling) fallbackSibling.classList.remove('hidden');
     }
   };
 
@@ -47,11 +65,11 @@ const Team = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {sortedMembers.map((member, idx) => {
-          const isLead = member.role?.toLowerCase().includes('lead') || member.role?.toLowerCase().includes('manager');
+          const isLead = member?.role?.toLowerCase().includes('lead') || member?.role?.toLowerCase().includes('manager');
           return (
             <motion.div 
               key={idx}
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.08 }}
@@ -62,21 +80,21 @@ const Team = () => {
               
               <div className="w-32 h-32 rounded-full bg-background/50 border-2 border-white/10 group-hover:border-primary-gold/50 transition-colors mb-6 flex items-center justify-center relative overflow-hidden">
                  <img 
-                   src={member.imageUrl || '/assets/team/placeholder.jpg'} 
-                   alt={member.name} 
+                   src={member?.imageUrl || '/assets/team/placeholder.jpg'} 
+                   alt={member?.name || 'Team Member'} 
                    className="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 transition-opacity" 
                    onError={handleImgError}
                  />
-                 <span className="hidden absolute text-xs text-secondary-text font-bold tracking-widest uppercase">{member.name?.charAt(0)}</span>
+                 <span className="hidden absolute text-xs text-secondary-text font-bold tracking-widest uppercase">{member?.name?.charAt(0)}</span>
               </div>
               
-              <h4 className="text-2xl font-black text-white mb-1 group-hover:text-primary-gold transition-colors">{member.name}</h4>
-              <p className="text-sm text-silver mb-2 uppercase tracking-wider font-semibold">{member.role}</p>
+              <h4 className="text-2xl font-black text-white mb-1 group-hover:text-primary-gold transition-colors">{member?.name}</h4>
+              <p className="text-sm text-silver mb-2 uppercase tracking-wider font-semibold">{member?.role}</p>
               
-              {member.skills && (
+              {member?.skills && (
                 <p className="text-xs text-zinc-400 mb-2 px-2 line-clamp-2" title={member.skills}>{member.skills}</p>
               )}
-              {member.phone && (
+              {member?.phone && (
                 <a
                   href={`tel:${member.phone.replace(/\s/g, '')}`}
                   className="text-xs text-primary-gold/80 mb-3 font-mono hover:text-primary-gold transition-colors"

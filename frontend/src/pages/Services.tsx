@@ -4,6 +4,21 @@ import { MagneticButton } from '../components/ui/MagneticButton';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+const DEFAULT_SERVICES = [
+  { name: "20 Videos Plan", description: "Monthly plan for 20 long-form videos.", price: "7000.00", planType: "MONTHLY", features: "20 Long Videos, Priority Support, Dedicated Editor" },
+  { name: "20 Shorts Plan", description: "Monthly plan for 20 shorts/reels.", price: "3000.00", planType: "MONTHLY", features: "20 Shorts, Viral Hooks, Quick Turnaround" },
+  { name: "20 Videos + 20 Shorts", description: "Combined monthly plan.", price: "10000.00", planType: "MONTHLY", features: "20 Videos, 20 Shorts, Premium Support" },
+  { name: "Full Monthly Management", description: "Complete channel takeover.", price: "12000.00", planType: "MONTHLY", features: "Editing, Thumbnails, Upload, Channel Management" },
+  { name: "Single Video Editing", description: "High quality video editing for a single video.", price: "500.00", planType: "SINGLE", features: "Professional Video Editing, Color Grading, Audio Enhancement" },
+  { name: "Single Shorts Editing", description: "Engaging short-form content editing.", price: "200.00", planType: "SINGLE", features: "Shorts Editing, Captions, Motion Graphics" },
+  { name: "Thumbnail Design", description: "Clickable, high-CTR thumbnail designs.", price: "100.00", planType: "SINGLE", features: "Custom Design, Source File" },
+  { name: "Upload & Channel Management", description: "Complete channel management.", price: "200.00", planType: "SINGLE", features: "SEO Optimization, Tags, Publishing" },
+  { name: "Poster Design", description: "High quality poster design.", price: "300.00", planType: "SINGLE", features: "Custom Design, High Resolution" },
+  { name: "Flex Banner Design", description: "Print-ready flex banner designs.", price: "300.00", planType: "SINGLE", features: "CMYK format, Print Ready" },
+  { name: "Custom Frame Design", description: "Custom frame designs for videos.", price: "300.00", planType: "SINGLE", features: "Custom UI, Brand Colors" },
+  { name: "Logo Design", description: "Professional brand identity.", price: "500.00", planType: "SINGLE", features: "Vector Files, Multiple Concepts" }
+];
+
 const CheckIcon = () => (
   <svg className="w-4 h-4 text-primary-gold mr-3 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -11,27 +26,32 @@ const CheckIcon = () => (
 );
 
 const Services = () => {
-  const [services, setServices] = useState<any[]>([]);
+  const [services, setServices] = useState<any[]>(DEFAULT_SERVICES);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchServices = async () => {
       try {
         const res = await axios.get('/api/public/services');
-        setServices(res.data);
+        if (Array.isArray(res.data) && res.data.length > 0 && isMounted) {
+          setServices(res.data);
+        }
       } catch {
-        // Fallback to empty state
+        // Retain default services fallback array
       }
     };
     fetchServices();
+    return () => { isMounted = false; };
   }, []);
 
-  const monthlyPlans = services.filter(s => s.planType === 'MONTHLY');
-  const singleServices = services.filter(s => s.planType === 'SINGLE' || s.planType === 'ONETIME');
+  const safeServices = Array.isArray(services) && services.length > 0 ? services : DEFAULT_SERVICES;
+  const monthlyPlans = safeServices.filter(s => s?.planType === 'MONTHLY');
+  const singleServices = safeServices.filter(s => s?.planType === 'SINGLE' || s?.planType === 'ONETIME');
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-24 min-h-screen">
       <motion.div 
-        initial={{ opacity: 0, y: 50 }} 
+        initial={{ opacity: 0, y: 30 }} 
         animate={{ opacity: 1, y: 0 }} 
         className="text-center mb-20"
       >
@@ -44,7 +64,7 @@ const Services = () => {
         <h3 className="text-3xl font-black text-white mb-10 text-center uppercase tracking-wider border-b border-white/10 pb-4 inline-block">Monthly Plans</h3>
         <div className="grid md:grid-cols-4 gap-6">
           {monthlyPlans.map((plan, idx) => {
-            const isPopular = plan.name.toLowerCase().includes("full");
+            const isPopular = plan.name?.toLowerCase().includes("full");
             return (
             <motion.div 
               key={idx}
@@ -93,7 +113,7 @@ const Services = () => {
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
           {singleServices.map((service, idx) => {
-            const isLogo = service.name.toLowerCase().includes("logo");
+            const isLogo = service.name?.toLowerCase().includes("logo");
             return (
               <motion.div 
                 key={idx}

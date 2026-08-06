@@ -9,15 +9,20 @@ const FAQ = () => {
   const [faqs, setFaqs] = useState<any[]>([]);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchFaqs = async () => {
       try {
         const res = await axios.get('/api/public/faqs');
-        setFaqs(res.data.sort((a: any, b: any) => a.displayOrder - b.displayOrder));
+        if (Array.isArray(res.data) && isMounted) {
+          const sorted = [...res.data].sort((a: any, b: any) => (a.displayOrder ?? 99) - (b.displayOrder ?? 99));
+          setFaqs(sorted);
+        }
       } catch {
-        // Fallback to empty state
+        // Retain empty state fallback
       }
     };
     fetchFaqs();
+    return () => { isMounted = false; };
   }, []);
 
   const toggleFaq = (index: number) => {
