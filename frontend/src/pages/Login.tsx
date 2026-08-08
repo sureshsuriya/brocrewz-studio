@@ -14,7 +14,7 @@ const Login = () => {
   const onSubmit = async (data: any) => {
     setIsLoading(true);
     try {
-      const res = await axios.post('/api/auth/login', data);
+      const res = await axios.post('/api/auth/login', data, { timeout: 15000 });
       localStorage.setItem('token', res.data.token);
       toast.success('Successfully logged in!');
       navigate('/admin');
@@ -27,8 +27,10 @@ const Login = () => {
         } else {
           toast.error(`Login failed (HTTP ${err.response.status}). Please try again.`);
         }
+      } else if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
+        toast.error('Connection timed out. The backend server is not reachable. Please ensure the API server is deployed and VITE_API_BASE_URL is set in Vercel.');
       } else if (err.request) {
-        toast.error('Network error: Unable to connect to backend API server.');
+        toast.error('Network error: Unable to connect to backend API server. Ensure the backend is deployed and running.');
       } else {
         toast.error('An unexpected error occurred. Please try again.');
       }
